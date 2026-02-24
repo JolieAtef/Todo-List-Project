@@ -24,13 +24,42 @@ useEffect(()=>{
   getTodos()
 },[])
 
-let {formState, register,handleSubmit,reset}=useForm({
-    defaultValues:
-    {
-      title:"",
-      description:"",
-    },
-    resolver: zodResolver(schema),
+// let {formState, register,handleSubmit,reset}=useForm({
+//     defaultValues:
+//     {
+//       title:"",
+//       description:"",
+//     },
+//     resolver: zodResolver(schema),
+// })
+
+//  Add Form
+const {
+  formState: addFormState,
+  register: registerAdd,
+  handleSubmit: handleSubmitAdd,
+  reset: resetAdd,
+} = useForm({
+  defaultValues: {
+    title: "",
+    description: "",
+  },
+  resolver: zodResolver(schema),
+})
+
+
+// Update Form
+const {
+  formState: updateFormState,
+  register: registerUpdate,
+  handleSubmit: handleSubmitUpdate,
+  reset: resetUpdate,
+} = useForm({
+  defaultValues: {
+    title: "",
+    description: "",
+  },
+  resolver: zodResolver(schema),
 })
 
 function getTodos(){
@@ -53,7 +82,7 @@ function AddTodo(data){
     }
   }).then((res)=>{
     toast.success(res.data.message)
-    reset()
+    resetAdd()
     getTodos()
   }).catch((err)=>{
     console.log(err.message)
@@ -94,14 +123,13 @@ function setupUpdate(todo){
   console.log(todo)
   setIsOpen(true)
   setCurrentTodo(todo)
-  reset({
+  resetUpdate({
     title: todo.title,
     description: todo.description
   })
 }
 
 function todoUpdate(data){
-
   axios.patch(`https://todo-nti.vercel.app/todo/update-todo/${currentTodo._id}`,data,{
     headers:{
       token:localStorage.getItem("Token")
@@ -118,19 +146,19 @@ function todoUpdate(data){
 
 return <>
 <div className="pt-8">
-<form className="w-full md:w-[40%]  mx-auto py-10  px-15 shadow-2xl rounded-xl" onSubmit={handleSubmit(AddTodo)}>
+<form className="w-full md:w-[40%]  mx-auto py-10  px-15 shadow-2xl rounded-xl" onSubmit={handleSubmitAdd(AddTodo)}>
   <h2 className="text-3xl font-semibold my-4 text-center">Create New ToDo</h2>
   
   <div className="relative z-0 w-full mb-5 group">
-      <input {...register("title")} type="title" id="floating_title" className="block py-2.5 px-0 w-full text-sm text-heading bg-transparent border-0 border-b-2 border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer" placeholder=" " />
+      <input {...registerAdd("title")} type="title" id="floating_title" className="block py-2.5 px-0 w-full text-sm text-heading bg-transparent border-0 border-b-2 border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer" placeholder=" " />
       <label htmlFor="floating_title" className="absolute text-sm text-body duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Title</label>
-      {formState.errors.title &&<p className="text-red-500">{formState.errors.title.message}</p>}
+      {addFormState.errors.title &&<p className="text-red-500">{addFormState.errors.title.message}</p>}
   </div>
 
   <div className="relative z-0 w-full mb-5 group">
-      <textarea {...register("description")} id="floating_description" className="block py-2.5 px-0 w-full text-sm text-heading bg-transparent border-0 border-b-2 border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer" placeholder=" " />
+      <textarea {...registerAdd("description")} id="floating_description" className="block py-2.5 px-0 w-full text-sm text-heading bg-transparent border-0 border-b-2 border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer" placeholder=" " />
       <label htmlFor="floating_description" className="absolute text-sm text-body duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Description</label>
-      {formState.errors.description &&<p className="text-red-500">{formState.errors.description.message}</p>}
+      {addFormState.errors.description &&<p className="text-red-500">{addFormState.errors.description.message}</p>}
   </div>
   
   <button type="submit" className=" my-2 w-full text-white bg-brand box-border border border-transparent cursor-pointer hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed" disabled={isLoading}>
@@ -180,18 +208,18 @@ return <>
                 <div className="grid gap-4 grid-cols-2 py-4 md:py-6">
                     <div className="col-span-2">
                         <label htmlFor="title" className="block mb-2.5 text-sm font-medium text-heading">Title</label>
-                        <input type="text"{...register("title")} name="title" id="title" className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" />
-                        {formState.errors.title &&<p className="text-red-500">{formState.errors.title.message}</p>}
+                        <input type="text"{...registerUpdate("title")} name="title" id="title" className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" />
+                        {updateFormState.errors.title &&<p className="text-red-500">{updateFormState.errors.title.message}</p>}
                     </div>
                    
                     <div className="col-span-2">
                         <label htmlFor="description" className="block mb-2.5 text-sm font-medium text-heading">Description</label>
-                        <textarea id="description" {...register("description")} rows="4" className="block bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full p-3.5 shadow-xs placeholder:text-body" ></textarea>
-                        {formState.errors.description &&<p className="text-red-500">{formState.errors.description.message}</p>}                    
+                        <textarea id="description" {...registerUpdate("description")} rows="4" className="block bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full p-3.5 shadow-xs placeholder:text-body" ></textarea>
+                        {updateFormState.errors.description &&<p className="text-red-500">{updateFormState.errors.description.message}</p>}                    
                     </div>
                 </div>
                 <div className="flex items-center space-x-4 border-t border-default pt-4 md:pt-6">
-                    <button type="submit" className="inline-flex items-center  text-white bg-brand hover:bg-brand-strong box-border border border-transparent focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none" onClick={handleSubmit(todoUpdate)}>
+                    <button type="submit" className="inline-flex items-center  text-white bg-brand hover:bg-brand-strong box-border border border-transparent focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none" onClick={handleSubmitUpdate(todoUpdate)} data-modal-target="crud-modal">
                         <svg className="w-4 h-4 me-1.5 -ms-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7 7V5"/></svg>
                         Update
                     </button>
