@@ -178,7 +178,7 @@ return <>
          <p className="text-gray-600 mb-6">{todo.description} </p>      
         <div className="flex justify-center gap-3">
           <button className="px-4 py-2 bg-red-500 font-semibold text-white rounded-xl hover:bg-red-600 transition" onClick={() => deleteTodo(todo._id)}>Delete</button>
-          <button className="px-4 py-2 bg-amber-500 font-semibold text-white rounded-xl hover:bg-amber-600 transition" onClick={() => setupUpdate(todo)}> Update </button>
+          <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" className="px-4 py-2 bg-amber-500 font-semibold text-white rounded-xl hover:bg-amber-600 transition"  onClick={() => setupUpdate(todo)}> Update </button>
         </div>
       </div>
     ))}
@@ -219,7 +219,7 @@ return <>
                     </div>
                 </div>
                 <div className="flex items-center space-x-4 border-t border-default pt-4 md:pt-6">
-                    <button type="submit" className="inline-flex items-center  text-white bg-brand hover:bg-brand-strong box-border border border-transparent focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none" onClick={handleSubmitUpdate(todoUpdate)} data-modal-target="crud-modal">
+                    <button type="submit" className="inline-flex items-center  text-white bg-brand hover:bg-brand-strong box-border border border-transparent focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none" onClick={handleSubmitUpdate(todoUpdate)}>
                         <svg className="w-4 h-4 me-1.5 -ms-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7 7V5"/></svg>
                         Update
                     </button>
