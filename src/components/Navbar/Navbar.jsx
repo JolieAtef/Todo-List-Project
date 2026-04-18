@@ -19,7 +19,7 @@ export function Navbar() {
     setUserData({})
     localStorage.removeItem("Token")
     localStorage.removeItem("UserData")
-    navigate("/login")
+    navigate("/")
   }
 
   return <>     

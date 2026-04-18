@@ -10,15 +10,16 @@ import UserContextProvider from './Contexts/UserContext.jsx'
 import { UserRoutes } from './components/UserRoutes/UserRoutes.jsx'
 
 
-let routes =createBrowserRouter([{
-  path:"/",element:<Layout/>,children:[
-    {path:"/",element:<UserRoutes><Home/></UserRoutes>},
-    {path:"profile",element:<UserRoutes><Profile/></UserRoutes>},
-    {path:"login",element:<Login/> },
-    {path:"register",element:<Register/> },
-    {path:"*",element:<Notfound/> },
-  ]
-}])
+
+let routes =createBrowserRouter([
+  {path:"/",element:<Login/>},
+  {path:"/register",element:<Register/>},
+  {path:"/",element:<Layout/>,children:[
+      {path:"/home",element:<UserRoutes><Home/></UserRoutes>},
+      {path:"/profile",element:<UserRoutes><Profile/></UserRoutes>}
+  ]},
+  {path:"*",element:<Notfound/>}
+])
 
 function App() {
  
@@ -26,7 +27,8 @@ function App() {
   return (
     <>
     <UserContextProvider>
-    <RouterProvider router={routes}></RouterProvider>
+    <RouterProvider router={routes}>
+    </RouterProvider>
     </UserContextProvider>
     </>
   )

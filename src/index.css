@@ -4,3 +4,27 @@
 @plugin "flowbite/plugin";
 @source "../node_modules/flowbite";
 
+
+
+:root{
+    --primary-color:#903F00;
+    --medium-color:#B45309;
+    --secondary-color:#564338;
+    --low-color:#FDF8F1;
+    --font-heading: 'Manrope', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    
+}
+
+*{
+    box-sizing: border-box;
+}
+
+h1, h2, h3 , h4 , h5 , h6{
+    font-family: var(--font-heading);
+}
+  
+body, p, span {
+    font-family: var(--font-body);
+}
+
