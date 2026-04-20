@@ -6,8 +6,10 @@ import { Profile } from './components/Profile/Profile.jsx'
 import { Login } from './components/Login/Login.jsx'
 import { Register } from './components/Register/Register.jsx'
 import { Notfound } from './components/Notfound/Notfound.jsx'
-import UserContextProvider from './Contexts/UserContext.jsx'
 import { UserRoutes } from './components/UserRoutes/UserRoutes.jsx'
+import { AllTasks } from './components/AllTasks/AllTasks.jsx'
+import { CollectionTasks } from './components/collectionTasks/collectionTasks.jsx'
+import UserContextProvider from './Contexts/UserContext.jsx'
 
 
 
@@ -16,7 +18,9 @@ let routes =createBrowserRouter([
   {path:"/register",element:<Register/>},
   {path:"/",element:<Layout/>,children:[
       {path:"/home",element:<UserRoutes><Home/></UserRoutes>},
-      {path:"/profile",element:<UserRoutes><Profile/></UserRoutes>}
+      {path:"/home/:id", element:<UserRoutes><CollectionTasks/></UserRoutes>},
+      {path:"/profile",element:<UserRoutes><Profile/></UserRoutes>},
+      {path:"/tasks", element:<UserRoutes><AllTasks/></UserRoutes>}
   ]},
   {path:"*",element:<Notfound/>}
 ])

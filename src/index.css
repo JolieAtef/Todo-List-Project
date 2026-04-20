@@ -15,6 +15,9 @@
     --font-body: 'Inter', sans-serif;
     
 }
+body{
+    background-color: var(--low-color);
+}
 
 *{
     box-sizing: border-box;
@@ -27,4 +30,9 @@ h1, h2, h3 , h4 , h5 , h6{
 body, p, span {
     font-family: var(--font-body);
 }
+
+input[type="checkbox"] {
+    border-color: var(--primary-color);
+}
+
 
