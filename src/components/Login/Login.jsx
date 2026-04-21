@@ -91,11 +91,11 @@ return <>
         <div className="logo_icon  flex justify-center w-11 h-11 rounded-xl bg-[linear-gradient(135deg,var(--primary-color),var(--medium-color))] ">
           <img src="./images/logo.svg" alt="logo" className="w-5"/>
         </div>
-          <h1 className="font-bold text-xl text-[var(--low-color)]">Todo List</h1>
+          <h1 className="font-bold text-xl text-(--low-color)">Todo List</h1>
        </div>
      </div>
   </div>
-  <div className="signup_form px-10 pt-35 md:px-20 lg:px-30  bg-[var(--low-color)]">
+  <div className="signup_form px-10 pt-35 md:px-20 lg:px-30  bg-(--low-color)">
     <Toaster toastOptions={{duration:1300, position:'bottom-right',
       success:{
       iconTheme: {

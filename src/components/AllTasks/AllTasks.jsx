@@ -62,6 +62,20 @@ export function AllTasks() {
     }
   }
 
+
+  function deleteTask(id){
+    axios.delete(`https://todo-app-backend-wine.vercel.app/tasks/${id}`,{
+       headers:{
+           authorization:localStorage.getItem("Token")
+       }
+    }).then((res)=>{
+       console.log(res.data.message)
+       setTasks(tasks.filter((task)=>task._id != id))
+    }).catch((err)=>{
+       console.log(err)
+    })
+}
+
   return (
   <>
   {isLoading?<Loading/>:
@@ -70,10 +84,12 @@ export function AllTasks() {
    <div>
 
     {tasks.map((task)=>(
-      <TaskItem task={task} toggleTask={toggleTask}/>
+      <TaskItem task={task} tasks={tasks} setTasks={setTasks} toggleTask={toggleTask} deleteTask={deleteTask}/>
     ))}
    </div>
    }
   </div>}
+
+  
   </>);
 }
