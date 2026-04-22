@@ -67,10 +67,11 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import {z} from "zod"
+import { UserContext } from "../../Contexts/UserContext";
 
 
 let schema =z.object({
@@ -82,7 +83,9 @@ let schema =z.object({
 })
 
 export function TaskModal({isOpenAdd , isOpenUpdate , setIsOpenAdd , setIsOpenUpdate , currentTask , tasks , setTasks , setCategory , category}){
- 
+  
+  let{dueTasks, setDueTasks} = useContext(UserContext)
+
   let {register , handleSubmit , formState , setValue}=useForm({
     defaultValues:{
       "title":"",
@@ -99,7 +102,10 @@ export function TaskModal({isOpenAdd , isOpenUpdate , setIsOpenAdd , setIsOpenUp
       setValue("priority",currentTask.priority)
       setValue("dueDate",currentTask.dueDate)
     }else{
-      setValue("title", "")
+      setValue("title","")
+      setValue("description", "")
+      setValue("priority","")
+      setValue("dueDate","")
     }
   },[isOpenUpdate])
 
@@ -123,7 +129,9 @@ export function TaskModal({isOpenAdd , isOpenUpdate , setIsOpenAdd , setIsOpenUp
         setCategory((prev)=>({
           ...prev , categoryTasks:[...prev.categoryTasks, res.data.addedTask]
         }))
-        setTasks(prev => [...prev, res.data.addedTask])
+        if(new Date(res.data.addedTask.dueDate) < Date.now()){
+          setDueTasks(dueTasks+1)
+        }
     }).catch((err)=>{
          toast.error(err.response.data.message)
     }).finally(()=>{
@@ -146,6 +154,7 @@ export function TaskModal({isOpenAdd , isOpenUpdate , setIsOpenAdd , setIsOpenUp
            ...prev , categoryTasks:prev.categoryTasks.map((task)=> task._id === updatedTask._id? updatedTask :task)
           }))
        }
+       
     }).catch((err)=>{
       toast.error(err.response.data.message) 
     }).finally(()=>{
@@ -159,14 +168,14 @@ export function TaskModal({isOpenAdd , isOpenUpdate , setIsOpenAdd , setIsOpenUp
   return (
   <>
 
-<div id="crud-modal" tabIndex="-1" aria-hidden="true" className={`${isOpenAdd || isOpenUpdate ? 'flex' :'hidden'}  bg-gray-500/15 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0  max-h-full`}>
+<div id="crud-modal" tabIndex="-1" aria-hidden="true" className={`${isOpenAdd || isOpenUpdate ? 'flex' :'hidden'}  bg-gray-400/45 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0  max-h-full`}>
     <div className="relative p-4 w-full max-w-md max-h-full">
         <div className="relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6">
             <div className="flex items-center justify-between border-b border-default pb-4 md:pb-5">
                 <h3 className="text-lg font-medium text-heading">
                     {isOpenAdd? 'Create New Task': 'Update Task'}
                 </h3>
-                <button onClick={()=>{setIsOpenAdd(false) , setIsOpenUpdate(false)}}  type="button" className="text-body bg-transparent hover:bg-neutral-tertiary hover:text-heading rounded-base text-sm w-9 h-9 ms-auto inline-flex justify-center items-center" data-modal-hide="crud-modal">
+                <button onClick={()=>{tasks? setIsOpenUpdate(false) : setIsOpenAdd(false) , setIsOpenUpdate(false)}}  type="button" className="text-body bg-transparent hover:bg-neutral-tertiary hover:text-heading rounded-base text-sm w-9 h-9 ms-auto inline-flex justify-center items-center" data-modal-hide="crud-modal">
                     <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18 17.94 6M18 18 6.06 6"/></svg>
                     <span className="sr-only">Close modal</span>
                 </button>
@@ -175,18 +184,18 @@ export function TaskModal({isOpenAdd , isOpenUpdate , setIsOpenAdd , setIsOpenUp
                 <div className="grid gap-4 grid-cols-2 py-4 md:py-6">
                     <div className="col-span-2">
                         <label htmlFor="name" className="block mb-2.5 text-sm font-medium text-heading">Title</label>
-                        <input {...register("title")} type="text"  id="name" className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-(--medium-color) focus:border-(--medium-color) block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="Type collection title" />
+                        <input {...register("title")} type="text"  id="name" className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-(--medium-color) focus:border-(--medium-color) block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="Type task title" />
                          {formState.errors.title && <p className="text-sm text-(--secondary-color)/80 italic">{formState.errors.title.message}</p>}
                     </div>
                     <div className="col-span-2">
                         <label htmlFor="name" className="block mb-2.5 text-sm font-medium text-heading">Description</label>
-                        <input {...register("description")} type="text"  id="name" className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-(--medium-color) focus:border-(--medium-color) block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="Type collection title" />
+                        <input {...register("description")} type="text"  id="name" className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-(--medium-color) focus:border-(--medium-color) block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="Type task description" />
                          {formState.errors.description && <p className="text-sm text-(--secondary-color)/80 italic">{formState.errors.description.message}</p>}
                     </div>
                     <div class="col-span-2 ">
                         <label htmlFor="priority" class="block mb-2.5 text-sm font-medium text-heading">Priority</label>
-                        <select {...register("priority")}  id="priority" class="block w-full px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand px-3 py-2.5 shadow-xs placeholder:text-body">
-                            <option selected="">Select priority</option>
+                        <select {...register("priority")}  id="priority" class="block w-full px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-(--medium-color) px-3 py-2.5 shadow-xs placeholder:text-body">
+                            {/* <option selected="">Select priority</option> */}
                             <option value="low">Low</option>
                             <option value="medium">Medium</option>
                             <option value="high">High</option>
@@ -194,7 +203,7 @@ export function TaskModal({isOpenAdd , isOpenUpdate , setIsOpenAdd , setIsOpenUp
                     </div>
                     <div className="col-span-2">
                         <label htmlFor="date" className="block  mb-2.5 text-sm font-medium text-heading">Due Date</label>
-                        <input {...register("dueDate")} type="date"  id="date" className="bg-neutral-secondary-medium border border-default-medium w-full h-12 rounded-base  block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="$2999" />
+                        <input {...register("dueDate")} type="date"  id="date" className="bg-neutral-secondary-medium border border-default-medium w-full h-12 rounded-base focus:ring-(--medium-color) block w-full px-3 py-2.5 shadow-xs placeholder:text-body"  />
                         {formState.errors.dueDate && <p className="text-sm text-(--secondary-color)/80 italic">{formState.errors.dueDate.message}</p>}
                     </div>     
                 </div>

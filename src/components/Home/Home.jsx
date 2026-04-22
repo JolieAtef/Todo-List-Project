@@ -26,12 +26,12 @@ export function Home() {
     
 
     useEffect(()=>{
+      setIsLoading(true)
       getCollections()
     },[])
 
 
     function getCollections(){
-        setIsLoading(true)
         axios.get("https://todo-app-backend-wine.vercel.app/categories",{
           headers:{
             authorization:localStorage.getItem("Token")
@@ -55,9 +55,12 @@ export function Home() {
            }
         }).then((res)=>{
            console.log(res.data.message)
-           setCollections((prev)=> prev.filter((collection)=>collection._id != id))
+          //  setCollections((prev)=> prev.filter((collection)=>collection._id != id))
+          getCollections()
         }).catch((err)=>{
            console.log(err)
+        }).finally(()=>{
+          setIsOpenDelete(false)
         })
     }
 
@@ -85,10 +88,9 @@ export function Home() {
     </div>
     </div>
    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 justify-center pt-5"> 
-    {
-      collections.map((collection, i)=>(
-    
-    <div className="bg-neutral-primary-soft block max-w-sm p-6 border border-default rounded-base hover:shadow-2xl hover:-translate-y-1 transition-all duration-200 " key={collection._id} >
+   {
+     collections.map((collection)=>( 
+    <div style={{"--card-color": collection.color }} className="bg-(--card-color)/20 block max-w-sm p-6 border border-default rounded-base hover:shadow-2xl hover:-translate-y-1 transition-all duration-200" key={collection._id} >
     <p className="mb-3 text-3xl font-semibold tracking-tight text-heading leading-8">{collection.title}</p>
     <p className="text-(--secondary-color) mb-6">{`${collection.categoryTasks?.length || 0} Active Tasks`}</p>
     <div className="collection_footer flex justify-between">
@@ -99,7 +101,7 @@ export function Home() {
     </svg>
      </button>
 
-    <button onClick={()=>setIsOpenDelete(true)} type="button" className="inline-flex items-center justify-center  text-(--secondary-color) bg-(--low-color) hover:-translate-y-1 transition-all duration-150 hover:shadow-amber-900  shadow-xs rounded-full w-9 h-9 focus:outline-none">
+    <button onClick={()=>{setIsOpenDelete(true) , setCurrentCollection(collection)}} type="button" className="inline-flex items-center justify-center  text-(--secondary-color) bg-(--low-color) hover:-translate-y-1 transition-all duration-150 hover:shadow-amber-900  shadow-xs rounded-full w-9 h-9 focus:outline-none">
     <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M2.5 15C2.04167 15 1.64931 14.8368 1.32292 14.5104C0.996528 14.184 0.833333 13.7917 0.833333 13.3333V2.5H0V0.833333H4.16667V0H9.16667V0.833333H13.3333V2.5H12.5V13.3333C12.5 13.7917 12.3368 14.184 12.0104 14.5104C11.684 14.8368 11.2917 15 10.8333 15H2.5ZM10.8333 2.5H2.5V13.3333H10.8333V2.5ZM4.16667 11.6667H5.83333V4.16667H4.16667V11.6667ZM7.5 11.6667H9.16667V4.16667H7.5V11.6667ZM2.5 2.5V13.3333V2.5Z" fill="#564338"/>
     </svg>
@@ -112,9 +114,14 @@ export function Home() {
     </Link>
     </div>
 
-    <CollectionModal isOpenAdd={isOpenAdd} setIsOpenAdd={setIsOpenAdd} isOpenUpdate={isOpenUpdate} setIsOpenUpdate={setIsOpenUpdate} currentCollection={currentCollection} collections={collections}  setCollections={setCollections}/>
 
-    <div id="popup-modal" tabindex="-1" class={`${isOpenDelete?"flex":"hidden"} overflow-y-auto overflow-x-hidden bg-gray-400/8 fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0  max-h-full`} >
+
+      </div>
+     ))
+    }
+   </div>
+
+    <div  tabIndex="-1" class={`${isOpenDelete? "flex" : "hidden"} overflow-y-auto overflow-x-hidden bg-gray-400/45 fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0  max-h-full`} >
          <div class="relative p-4 w-full max-w-md max-h-full">
          <div class="relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6">
                 <button onClick={()=>setIsOpenDelete(false)} type="button" class="absolute top-3 end-2.5 text-body bg-transparent hover:bg-neutral-tertiary hover:text-heading rounded-base text-sm w-9 h-9 ms-auto inline-flex justify-center items-center" data-modal-hide="popup-modal">
@@ -125,7 +132,7 @@ export function Home() {
                 <svg class="mx-auto mb-4 text-fg-disabled w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
                 <h3 class="mb-6 text-body">Are you sure you want to delete this task from your list?</h3>
                 <div class="flex items-center space-x-4 justify-center">
-                    <button onClick={()=>{deleteCollection(collection._id), setIsOpenDelete(false)}} data-modal-hide="popup-modal" type="button" class="text-white bg-danger box-border border border-transparent hover:bg-danger-strong focus:ring-4 focus:ring-danger-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">
+                    <button onClick={()=>{deleteCollection(currentCollection._id)}} data-modal-hide="popup-modal" type="button" class="text-white bg-danger box-border border border-transparent hover:bg-danger-strong focus:ring-4 focus:ring-danger-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">
                     Yes, I'm sure
                     </button>
                     <button onClick={()=>setIsOpenDelete(false)} data-modal-hide="popup-modal" type="button" class="text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">No, cancel</button>
@@ -134,12 +141,9 @@ export function Home() {
         </div>
     </div>
     </div>
-    </div>
-     ))
-    }
-   </div>
-
    
+    <CollectionModal isOpenAdd={isOpenAdd} setIsOpenAdd={setIsOpenAdd} isOpenUpdate={isOpenUpdate} setIsOpenUpdate={setIsOpenUpdate} currentCollection={currentCollection}  getCollections={getCollections}/>
+    
 
    </div>: 
    <div>

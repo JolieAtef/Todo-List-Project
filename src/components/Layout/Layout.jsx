@@ -6,7 +6,8 @@ import { UserContext } from "../../Contexts/UserContext.jsx";
 
 export function Layout() {
 
-  let {token ,setToken} =useContext(UserContext)
+  let {token ,setToken , userData , dueTasks } =useContext(UserContext)
+  
   let navigate= useNavigate()
 
   useEffect(() => {
@@ -45,16 +46,16 @@ export function Layout() {
               <div className="relative w-10 h-10 overflow-hidden bg-(--low-color) rounded-full">
               <svg className="absolute w-12 h-12 text-(--secondary-color)/65 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path></svg>
               </div>
-              <h3>hiih</h3>
+              <h3>{userData.name}</h3>
             </button>
             </div>
             <div className="z-50 hidden bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-44" id="dropdown-user">
               <div className="px-4 py-3 border-b border-default-medium" role="none">
                 <p className="text-sm font-medium text-(--secondary-color)" role="none">
-                  Neil Sims
+                 {userData.name}
                 </p>
                 <p className="text-sm text-heading" role="none">
-                  neil.sims@flowbite.com
+                  {userData.email}
                 </p>
               </div>
               <ul className="p-2 text-sm text-(--secondary-color) font-medium" role="none">
@@ -85,7 +86,7 @@ export function Layout() {
             <Link to="/tasks" className="flex items-center px-2 py-1.5 text-(--secondary-color) rounded-base hover:bg-neutral-primary-soft hover:text-(--medium-color) group">
             <svg className="w-6 h-6 mb-1 text-(--secondary-color) group-hover:text-(--medium-color)" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"d="M9 6h11M9 12h11M9 18h11M5 6h.01M5 12h.01M5 18h.01"/></svg>               
             <span className="flex-1 ms-3 whitespace-nowrap">Tasks</span>
-               <span className="inline-flex items-center justify-center w-4.5 h-4.5 ms-2 text-xs font-medium text-fg-danger-strong bg-danger-soft border border-danger-subtle rounded-full">2</span>
+               <span className="inline-flex items-center justify-center w-4.5 h-4.5 ms-2 text-xs font-medium text-fg-danger-strong bg-danger-soft border border-danger-subtle rounded-full">{dueTasks}</span>
             </Link>
          </li>
          <li>
@@ -110,37 +111,27 @@ export function Layout() {
     
 
 <div className="fixed z-50 w-full h-16 block md:hidden max-w-lg -translate-x-1/2 bg-neutral-primary-soft border border-default rounded-full bottom-4 left-1/2">
-    <div className="grid h-full max-w-lg grid-cols-5 mx-auto">
-        <button data-tooltip-target="tooltip-home" type="button" className="inline-flex flex-col items-center justify-center px-5 rounded-s-full hover:bg-neutral-secondary-medium group">
+    <div className="grid h-full max-w-lg grid-cols-4 mx-auto">
+        <Link to="/home" data-tooltip-target="tooltip-home" type="button" className="inline-flex flex-col items-center justify-center px-5 rounded-s-full hover:bg-neutral-secondary-medium group">
             <svg className="w-6 h-6 mb-1 text-(--secondary-color) group-hover:text-(--medium-color)" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5"/></svg>
             <span className="sr-only">Home</span>
-        </button>
+        </Link>
         <div id="tooltip-home" role="tooltip" className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-dark rounded-base shadow-xs opacity-0 tooltip">
             Home
             <div className="tooltip-arrow" data-popper-arrow></div>
         </div>
-        <button data-tooltip-target="tooltip-wallet" type="button" className="inline-flex flex-col items-center justify-center px-5 hover:bg-neutral-secondary-medium group">
+        <Link to="/tasks" data-tooltip-target="tooltip-wallet" type="button" className="inline-flex flex-col items-center justify-center px-5 hover:bg-neutral-secondary-medium group">
         <svg className="w-6 h-6 mb-1 text-(--secondary-color) group-hover:text-(--medium-color)" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"d="M9 6h11M9 12h11M9 18h11M5 6h.01M5 12h.01M5 18h.01"/></svg>          
         <span className="sr-only">Tasks</span>
-        </button>
+        </Link>
         <div id="tooltip-wallet" role="tooltip" className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-dark rounded-base shadow-xs opacity-0 tooltip">
             Tasks
           <div className="tooltip-arrow" data-popper-arrow></div>
         </div>
-        <div className="flex items-center justify-center">
-            <button data-tooltip-target="tooltip-new" type="button" className="inline-flex items-center justify-center text-white bg-(--primary-color) hover:[var(--primary-color)]/80  shadow-xs rounded-full w-8 h-8 focus:outline-none">
-                <svg className="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7 7V5"/></svg>
-                <span className="sr-only">New item</span>
-            </button>
-        </div>
-        <div id="tooltip-new" role="tooltip" className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-dark rounded-base shadow-xs opacity-0 tooltip">
-            Create new item
-            <div className="tooltip-arrow" data-popper-arrow></div>
-        </div>
-        <button data-tooltip-target="tooltip-profile" type="button" className="inline-flex flex-col items-center justify-center px-5 rounded-e-full hover:bg-neutral-secondary-medium group">
+        <Link to="/profile" data-tooltip-target="tooltip-profile" type="button" className="inline-flex flex-col items-center justify-center px-5 rounded-e-full hover:bg-neutral-secondary-medium group">
             <svg className="w-6 h-6 mb-1 text-(--secondary-color) group-hover:text-(--medium-color)" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
             <span className="sr-only">Profile</span>
-        </button>
+        </Link>
         <div id="tooltip-profile" role="tooltip" className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-dark rounded-base shadow-xs opacity-0 tooltip">
             Profile
             <div className="tooltip-arrow" data-popper-arrow></div>

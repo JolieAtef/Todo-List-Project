@@ -1,23 +1,25 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Loading } from "../Loading/Loading";
 import { TaskItem } from "../TaskItem/TaskItem";
+import { UserContext } from "../../Contexts/UserContext";
 
 
 export function CollectionTasks() {
   const { id } = useParams();
+  let {dueTasks , setDueTasks}= useContext(UserContext)
   let[category , setCategory]=useState("")
   let[isLoading , setIsLoading]=useState(false)
   let[isOpenAdd , setIsOpenAdd]=useState(false)
-  let[tasks,setTasks]=useState("")
+  
 
   useEffect(()=>{
+    setIsLoading(true)
     getCategory()
   },[])
  
   function getCategory(){
-    setIsLoading(true)
       axios.get(`https://todo-app-backend-wine.vercel.app/tasks/category/${id}`,{
         headers:{
           authorization:localStorage.getItem("Token")
@@ -25,7 +27,6 @@ export function CollectionTasks() {
       }).then((res)=>{
         console.log(res.data.category.categoryTasks)
         setCategory(res.data.category)
-        setTasks(res.data.category.categoryTasks)
       }).catch((err)=>{
         console.log()
       }).finally(()=>{
@@ -64,13 +65,18 @@ export function CollectionTasks() {
   }
 
   function deleteTask(id){
+    let task = category.categoryTasks.find((task)=>task._id == id)
+    let isDueDate = new Date(task.dueDate) < Date.now()
+    console.log(isDueDate)
     axios.delete(`https://todo-app-backend-wine.vercel.app/tasks/${id}`,{
        headers:{
           authorization:localStorage.getItem("Token")
        }
     }).then((res)=>{
-       let categoryTasks = category.categoryTasks.filter((task)=>task._id != id)
-       setCategory({...category,categoryTasks})
+       getCategory()
+       if(isDueDate){
+        setDueTasks(dueTasks-1)
+       }
     }).catch((err)=>{
        console.log(err)
     })
@@ -81,7 +87,7 @@ export function CollectionTasks() {
    {isLoading?<Loading/>:
    <div>
     <div className="header bg-[linear-gradient(to_top,rgba(255,255,255,0.8),rgba(255,255,255,0.1)),url('/images/Container.svg')]  bg-no-repeat bg-center bg-cover h-60 relative">
-      <div className="absolute bottom-0  start-10 end-15 flex justify-between ">
+      <div className="absolute bottom-0  start-10 end-15 flex flex-col md:flex-row justify-between ">
       <div className="">
       <h3 className="text-6xl font-semibold tracking-tight text-heading leading-8 mb-5">{category.title}</h3>
       <p className="text-(--secondary-color) mb-6 px-2 rounded-full bg-(--low-color) w-30 border border-1 border-(--secondary-color)">{`${category.categoryTasks?.length || 0} Active Tasks`}</p>

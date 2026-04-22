@@ -2,15 +2,17 @@ import axios from "axios";
 import React, { useState } from "react";
 import { TaskModal } from "../modals/TaskModal";
 
-export function TaskItem({task, tasks , toggleTask , deleteTask , isOpenAdd , setIsOpenAdd , setTasks , setCategory , category}) {
+export function TaskItem({task, tasks , toggleTask , deleteTask , isOpenAdd , setIsOpenAdd , setTasks , setCategory , category }) {
     let [isOpenDelete , setIsOpenDelete]=useState(false)
     let [isOpenUpdate , setIsOpenUpdate]=useState(false)
+   
+
     
   return (
   <>
    {!task?<div></div>:
    <div>
-   <div className="bg-neutral-primary-soft block w-8/10 mx-auto mt-3 p-6 border border-default rounded-base hover:shadow-2xl hover:-translate-y-1 transition-all duration-200 " key={task._id} >
+   <div className="bg-neutral-primary-soft block w-full p-3 md:w-8/10 mx-auto mt-3 md:p-6 border border-default rounded-base hover:shadow-2xl hover:-translate-y-1 transition-all duration-200 " key={task._id} >
           <div className="flex justify-between items-center">
           <div className="flex items-center mb-2">
            <input id="default-checkbox"  onClick={() => toggleTask(task._id)} checked={task.isCompleted}  type="checkbox" value="" className="w-5 h-5 border text-[var(--primary-color)] focus:ring-0 border-default-medium rounded-xl bg-neutral-secondary-medium  cursor-pointer"/>
