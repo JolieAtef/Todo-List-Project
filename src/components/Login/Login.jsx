@@ -49,6 +49,8 @@ export function Login() {
         setIsLoading(false)
       }
     )
+
+    
   }
 
 
@@ -112,29 +114,29 @@ return <>
     <form onSubmit={handleSubmit(LoginFun)}>
      <div className="form_header mb-8">
         <h2 className="text-5xl font-semibold my-2.5">Welcome Back</h2>
-        <p className="text-[var(--secondary-color)] ">Your focus starts here. Sign in to continue your journey.</p>
+        <p className="text-(--secondary-color) ">Your focus starts here. Sign in to continue your journey.</p>
      </div>
   
 
-    <label htmlFor="input-group-1" className="block mb-1.5 mt-3.5 text-sm  text-[var(--secondary-color)]">Email Address</label>
+    <label htmlFor="input-group-1" className="block mb-1.5 mt-3.5 text-sm  text-(--secondary-color)">Email Address</label>
     <div className="relative">
     <input {...register("email")}  type="email" id="input-group-1" className="block w-full ps-4 pe-3 py-2.5 bg-[#fbfaf7] border border-default-medium text-sm rounded-base focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] shadow-xs placeholder:text-[#a6a6a4]" placeholder="julianne@example.com"/>
-    {formState.errors.email &&<p className="text-sm text-[var(--secondary-color)]/80 italic">{formState.errors.email.message}</p>}
+    {formState.errors.email &&<p className="text-sm text-(--secondary-color)/80 italic">{formState.errors.email.message}</p>}
     </div>
 
 
-    <label htmlFor="input-group-2" className="block mb-1.5 mt-3.5 text-sm  text-[var(--secondary-color)]">Password</label>
+    <label htmlFor="input-group-2" className="block mb-1.5 mt-3.5 text-sm  text-(--secondary-color)">Password</label>
     <div className="relative">
-    <input {...register("password")}  type="password" id="input-group-2" className="block w-full ps-4 pe-3 py-2.5 bg-[#fbfaf7] border border-default-medium text-sm rounded-base focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] shadow-xs placeholder:text-[#a6a6a4]" placeholder="••••••••••••"/>
-    {formState.errors.password &&<p className="text-sm text-[var(--secondary-color)]/80 italic">{formState.errors.password.message}</p>}
+    <input {...register("password")}  type="password" id="input-group-2" className="block w-full ps-4 pe-3 py-2.5 bg-[#fbfaf7] border border-default-medium text-sm rounded-base focus:ring-(--primary-color) focus:border-(--primary-color) shadow-xs placeholder:text-[#a6a6a4]" placeholder="••••••••••••"/>
+    {formState.errors.password &&<p className="text-sm text-(--secondary-color)/80 italic">{formState.errors.password.message}</p>}
     </div>
 
     
-    <button type="submit" className=" my-4 md:my-8 w-full text-[var(--low-color)] bg-[linear-gradient(135deg,var(--primary-color),var(--medium-color))] shadow-2xl shadow-[color:var(--primary-color)]/50  box-border border border-transparent cursor-pointer hover:bg-amber-800 focus:ring-4 focus:ring-[var(--primary-color)]/20 font-medium leading-5 rounded-base text-sm px-4 py-3 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed" disabled={isLoading}>
+    <button type="submit" className=" my-4 md:my-8 w-full text-(--low-color) bg-[linear-gradient(135deg,var(--primary-color),var(--medium-color))] shadow-2xl shadow-[color:var(--primary-color)]/50  box-border border border-transparent cursor-pointer hover:bg-amber-800 focus:ring-4 focus:ring-(--primary-color)/20 font-medium leading-5 rounded-base text-sm px-4 py-3 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed" disabled={isLoading}>
     {isLoading? <span> <i className="fa fa-spin fa-spinner m-1"></i>Loading...</span>:"Sign In" }
     </button>
 
-    <p className="text-center text-[var(--secondary-color)]">New to Todo List? <Link to="/register" className="text-[var(--primary-color)]">Create an account</Link></p>
+    <p className="text-center text-(--secondary-color)">New to Todo List? <Link to="/register" className="text-(--primary-color)">Create an account</Link></p>
 
     </form>
   </div>

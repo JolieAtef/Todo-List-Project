@@ -195,7 +195,6 @@ export function TaskModal({isOpenAdd , isOpenUpdate , setIsOpenAdd , setIsOpenUp
                     <div class="col-span-2 ">
                         <label htmlFor="priority" class="block mb-2.5 text-sm font-medium text-heading">Priority</label>
                         <select {...register("priority")}  id="priority" class="block w-full px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-(--medium-color) px-3 py-2.5 shadow-xs placeholder:text-body">
-                            {/* <option selected="">Select priority</option> */}
                             <option value="low">Low</option>
                             <option value="medium">Medium</option>
                             <option value="high">High</option>

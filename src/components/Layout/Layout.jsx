@@ -26,6 +26,7 @@ export function Layout() {
       if (result.isConfirmed) {     
         setToken("")
         localStorage.removeItem("Token")
+        localStorage.removeItem("User")
         navigate("/")
       }})
   }
@@ -73,7 +74,7 @@ export function Layout() {
                   <Link to="/profile" className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded" role="menuitem">Profile</Link>
                 </li>
                 <li>
-                  <a href="#" className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded" role="menuitem"><button onClick={()=>signOut}>Sign out</button></a>
+                  <a href="#" className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded" role="menuitem"><button onClick={()=>signOut()}>Sign out</button></a>
                 </li>
               </ul>
             </div>

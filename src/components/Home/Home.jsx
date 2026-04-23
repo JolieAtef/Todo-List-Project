@@ -22,7 +22,7 @@ export function Home() {
     let [isOpenDelete , setIsOpenDelete]= useState(false)
     let [collections , setCollections]=useState("")
     let [currentCollection ,setCurrentCollection]=useState("")
-    let [colors , setColors]=useState("")
+   
     
 
     useEffect(()=>{
@@ -38,10 +38,10 @@ export function Home() {
           }
         }).then((res)=>{
           setCollections(res.data.categories)
-          setColors(res.data.categories.map((item)=>item.color))
           console.log(res.data)
         }).catch((err)=>{
           console.log(err)
+          setCollections("")
         }).finally(()=>{
            setIsLoading(false)
         })
@@ -55,11 +55,11 @@ export function Home() {
            }
         }).then((res)=>{
            console.log(res.data.message)
-          getCollections()
         }).catch((err)=>{
            console.log(err)
         }).finally(()=>{
           setIsOpenDelete(false)
+          getCollections()
         })
     }
 
@@ -72,9 +72,6 @@ export function Home() {
 
 <div className="collection">
 
-{
-   collections ? 
-   <div>
     <div className="home_header flex justify-between items-center flex-col md:flex-row gap-3">
     <div>
       <h2 className="font-semibold text-4xl pt-5 pb-1">My Collections</h2>
@@ -86,6 +83,9 @@ export function Home() {
     </button>
     </div>
     </div>
+
+{  collections ? 
+   <div>
    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 justify-center pt-5"> 
    {
      collections.map((collection)=>( 
@@ -120,28 +120,27 @@ export function Home() {
     }
    </div>
 
-    <div  tabIndex="-1" class={`${isOpenDelete? "flex" : "hidden"} overflow-y-auto overflow-x-hidden bg-gray-400/45 fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0  min-h-screen `} >
-         <div class="relative p-4 w-full max-w-md max-h-full">
-         <div class="relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6">
-                <button onClick={()=>setIsOpenDelete(false)} type="button" class="absolute top-3 end-2.5 text-body bg-transparent hover:bg-neutral-tertiary hover:text-heading rounded-base text-sm w-9 h-9 ms-auto inline-flex justify-center items-center" data-modal-hide="popup-modal">
-                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18 17.94 6M18 18 6.06 6"/></svg>
-                    <span class="sr-only">Close modal</span>
+    <div  tabIndex="-1" className={`${isOpenDelete? "flex" : "hidden"} overflow-y-auto overflow-x-hidden bg-gray-400/45 fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0  min-h-screen `} >
+         <div className="relative p-4 w-full max-w-md max-h-full">
+         <div className="relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6">
+                <button onClick={()=>setIsOpenDelete(false)} type="button" className="absolute top-3 end-2.5 text-body bg-transparent hover:bg-neutral-tertiary hover:text-heading rounded-base text-sm w-9 h-9 ms-auto inline-flex justify-center items-center" data-modal-hide="popup-modal">
+                    <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18 17.94 6M18 18 6.06 6"/></svg>
+                    <span className="sr-only">Close modal</span>
                 </button>
-            <div class="p-4 md:p-5 text-center">
-                <svg class="mx-auto mb-4 text-fg-disabled w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
-                <h3 class="mb-6 text-body">Are you sure you want to delete this task from your list?</h3>
-                <div class="flex items-center space-x-4 justify-center">
-                    <button onClick={()=>{deleteCollection(currentCollection._id)}} data-modal-hide="popup-modal" type="button" class="text-white bg-danger box-border border border-transparent hover:bg-danger-strong focus:ring-4 focus:ring-danger-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none cursor-pointer">
+            <div className="p-4 md:p-5 text-center">
+                <svg className="mx-auto mb-4 text-fg-disabled w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+                <h3 className="mb-6 text-body">Are you sure you want to delete this collection from your list?</h3>
+                <div className="flex items-center space-x-4 justify-center">
+                    <button onClick={()=>{deleteCollection(currentCollection._id)}} data-modal-hide="popup-modal" type="button" className="text-white bg-danger box-border border border-transparent hover:bg-danger-strong focus:ring-4 focus:ring-danger-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none cursor-pointer">
                     Yes, I'm sure
                     </button>
-                    <button onClick={()=>setIsOpenDelete(false)} data-modal-hide="popup-modal" type="button" class="text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none cursor-pointer">No, cancel</button>
+                    <button onClick={()=>setIsOpenDelete(false)} data-modal-hide="popup-modal" type="button" className="text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none cursor-pointer">No, cancel</button>
                 </div>
             </div>
         </div>
     </div>
     </div>
    
-    <CollectionModal isOpenAdd={isOpenAdd} setIsOpenAdd={setIsOpenAdd} isOpenUpdate={isOpenUpdate} setIsOpenUpdate={setIsOpenUpdate} currentCollection={currentCollection}  getCollections={getCollections}/>
     
 
    </div>: 
@@ -149,6 +148,8 @@ export function Home() {
     <p className="flex justify-center items-center pt-50">No Collections Found</p>
    </div>
 }
+
+  <CollectionModal isOpenAdd={isOpenAdd} setIsOpenAdd={setIsOpenAdd} isOpenUpdate={isOpenUpdate} setIsOpenUpdate={setIsOpenUpdate} currentCollection={currentCollection}  getCollections={getCollections}/>
 </div>
 }
 

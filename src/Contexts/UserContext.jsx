@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React from 'react';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
+
 
 
 export let UserContext = createContext()
@@ -14,7 +15,11 @@ export default function UserContextProvider(props){
         if(localStorage.getItem("Token")){
             setToken(localStorage.getItem("Token"))
         }
+        if(localStorage.getItem("User")){
+            setUserData(JSON.parse(localStorage.getItem("User")))
+        }
         getUser()
+
         getDueTasks()
     },[])
     
@@ -26,6 +31,7 @@ export default function UserContextProvider(props){
         }).then((res)=>{
             console.log(res.data)
             setUserData(res.data.user)
+            localStorage.setItem("User" , JSON.stringify(res.data.user))    
         }).catch((err)=>{
             console.log(err)
         })
