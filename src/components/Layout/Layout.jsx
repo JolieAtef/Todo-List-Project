@@ -3,6 +3,7 @@ import "./Layout.module.css"
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import {Footer} from "../Footer/Footer.jsx"
 import { UserContext } from "../../Contexts/UserContext.jsx";
+import Swal from "sweetalert2";
 
 export function Layout() {
 
@@ -15,9 +16,18 @@ export function Layout() {
   }, [])
 
   function signOut(){
-    setToken("")
-    localStorage.removeItem("Token")
-    navigate("/")
+    Swal.fire({
+      title: "Do you want to sign out?",
+      showCancelButton: true,
+      confirmButtonColor: "#B45309",
+      cancelButtonColor: "#c5a270",
+      confirmButtonText: "Sure"
+    }).then((result) => {
+      if (result.isConfirmed) {     
+        setToken("")
+        localStorage.removeItem("Token")
+        navigate("/")
+      }})
   }
 
 

@@ -168,7 +168,7 @@ export function TaskModal({isOpenAdd , isOpenUpdate , setIsOpenAdd , setIsOpenUp
   return (
   <>
 
-<div id="crud-modal" tabIndex="-1" aria-hidden="true" className={`${isOpenAdd || isOpenUpdate ? 'flex' :'hidden'}  bg-gray-400/45 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0  max-h-full`}>
+<div id="crud-modal" tabIndex="-1" aria-hidden="true" className={`${isOpenAdd || isOpenUpdate ? 'flex' :'hidden'}  bg-gray-400/45 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0  min-h-screen `}>
     <div className="relative p-4 w-full max-w-md max-h-full">
         <div className="relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6">
             <div className="flex items-center justify-between border-b border-default pb-4 md:pb-5">

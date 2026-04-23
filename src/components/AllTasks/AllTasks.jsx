@@ -79,7 +79,6 @@ export function AllTasks() {
        if(isDueDate){
         setDueTasks(dueTasks-1)
        }
-      //  setTasks(tasks.filter((task)=>task._id != id))
       getTasks()
     }).catch((err)=>{
        console.log(err)
@@ -111,29 +110,29 @@ function getCollections(){
       <h2 className="font-semibold text-4xl pt-5 pb-1">All Tasks</h2>
       <div className="flex lg:justify-between flex-col  lg:flex-row">
       <p className="text-(--secondary-color) pb-4">Curate your workflow. Focus on what truly matters today.</p>
-      <div class="flex items-center justify-center py-1.5 gap-0.5 bg-(--secondary-color)/8 flex-wrap  rounded-2xl w-fit">
-      <button onClick={()=>{setComplete(""), setPriority(""), setCategory("")}} type="button" class="text-(--secondary-color) shadow bg-neutral-primary focus:ring-2 focus:outline-none  rounded-base text-base font-medium px-2 py-1.5 text-center ms-1.5 me-1 ">All</button>
-      <button onClick={()=>setComplete(false)} type="button" class="text-(--secondary-color) shadow hover:border-default bg-neutral-primary focus:ring-2 focus:outline-none  rounded-base text-base font-medium px-2 py-1.5 text-center me-1 ">Bending</button>
-      <button onClick={()=>setComplete(true)} type="button" class="text-(--secondary-color) shadow hover:border-default bg-neutral-primary focus:ring-2 focus:outline-none  rounded-base text-base font-medium px-2 py-1.5 text-center me-1.5 ">Completed</button>
+      <div className="flex items-center justify-center py-1.5 gap-0.5 bg-(--secondary-color)/8 flex-wrap  rounded-2xl w-fit ">
+      <button onClick={()=>{setComplete(""), setPriority(""), setCategory("")}} type="button" className="text-(--secondary-color) shadow bg-neutral-primary focus:ring-2 focus:outline-none  rounded-base text-base font-medium px-2 py-1.5 text-center ms-1.5 me-1 cursor-pointer ">All</button>
+      <button onClick={()=>setComplete(false)} type="button" className="text-(--secondary-color) shadow hover:border-default bg-neutral-primary focus:ring-2 focus:outline-none  rounded-base text-base font-medium px-2 py-1.5 text-center me-1 cursor-pointer">Bending</button>
+      <button onClick={()=>setComplete(true)} type="button" className="text-(--secondary-color) shadow hover:border-default bg-neutral-primary focus:ring-2 focus:outline-none  rounded-base text-base font-medium px-2 py-1.5 text-center me-1.5 cursor-pointer">Completed</button>
      </div>
       </div>
 
       <div className="flex lg:gap-3 lg:items-center flex-col  lg:flex-row justify-start">
       <div className="flex items-center gap-2 mt-3">
         <label className="text-(--secondary-color) font-medium">Priority</label>
-        <div class="flex items-center justify-center py-1.5 gap-0.5 bg-(--secondary-color)/8 flex-wrap  rounded-2xl w-fit">
-      <button onClick={()=>setPriority("low")} type="button" class="text-(--secondary-color) shadow bg-neutral-primary focus:ring-2 focus:outline-none  rounded-base text-base font-medium px-2 py-1.5 text-center ms-1.5 me-1 ">Low</button>
-      <button onClick={()=>setPriority("medium")} type="button" class="text-(--secondary-color) shadow hover:border-default bg-neutral-primary focus:ring-2 focus:outline-none  rounded-base text-base font-medium px-2 py-1.5 text-center me-1 ">Medium</button>
-      <button onClick={()=>setPriority("high")} type="button" class="text-(--secondary-color) shadow hover:border-default bg-neutral-primary focus:ring-2 focus:outline-none  rounded-base text-base font-medium px-2 py-1.5 text-center me-1.5 ">High</button>
+        <div className="flex items-center justify-center py-1.5 gap-0.5 bg-(--secondary-color)/8 flex-wrap  rounded-2xl w-fit">
+      <button onClick={()=>setPriority("low")} type="button" className="text-(--secondary-color) shadow bg-neutral-primary focus:ring-2 focus:outline-none  rounded-base text-base font-medium px-2 py-1.5 text-center ms-1.5 me-1 cursor-pointer">Low</button>
+      <button onClick={()=>setPriority("medium")} type="button" className="text-(--secondary-color) shadow hover:border-default bg-neutral-primary focus:ring-2 focus:outline-none  rounded-base text-base font-medium px-2 py-1.5 text-center me-1 cursor-pointer">Medium</button>
+      <button onClick={()=>setPriority("high")} type="button" className="text-(--secondary-color) shadow hover:border-default bg-neutral-primary focus:ring-2 focus:outline-none  rounded-base text-base font-medium px-2 py-1.5 text-center me-1.5 cursor-pointer">High</button>
      </div>
       </div>
       <p className="text-(--secondary-color)/30 hidden lg:block">|</p>
       <div className="flex items-center gap-2 mt-3 ">
         <label className="text-(--secondary-color) font-medium">Collection</label>
         {collections? 
-        <select onChange={(e) => setCategory(e.target.value)} id="priority" class="block lg:w-full  px-3 py-2.5 bg-neutral-secondary-medium border focus:ring-(--primary-color) border-default-medium text-heading text-sm rounded-base px-3 py-2.5 shadow-xs  placeholder:text-body/20">
+        <select onChange={(e) => setCategory(e.target.value)} id="priority" className="block lg:w-full  px-3 py-2.5 bg-neutral-secondary-medium border focus:ring-(--primary-color) border-default-medium text-heading text-sm rounded-base px-3 py-2.5 shadow-xs  placeholder:text-body/20 ">
                     {collections.map((collection)=>(  
-                      <option key={collection._id} value={collection._id} className="rounded-base">{collection.title}</option> 
+                      <option key={collection._id} value={collection._id} className="rounded-base cursor-pointer">{collection.title}</option> 
                     ))}
          </select> : null
                     }
@@ -149,7 +148,7 @@ function getCollections(){
    {!tasks?<p className="text-2xl text-center font-medium mt-50">No Tasks Found</p>:
    <div className="px-8 pb-8">
     {tasks.map((task)=>(
-      <TaskItem task={task} tasks={tasks} setTasks={setTasks} toggleTask={toggleTask} deleteTask={deleteTask} getTasks={getTasks}/>
+      <TaskItem task={task} tasks={tasks} setTasks={setTasks} toggleTask={toggleTask} deleteTask={deleteTask} getTasks={getTasks} collections={collections}/>
     ))}
    </div>
    }

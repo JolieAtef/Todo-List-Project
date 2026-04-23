@@ -10,6 +10,7 @@ export function CollectionTasks() {
   const { id } = useParams();
   let {dueTasks , setDueTasks}= useContext(UserContext)
   let[category , setCategory]=useState("")
+  let[collections , setCollections]=useState("")
   let[isLoading , setIsLoading]=useState(false)
   let[isOpenAdd , setIsOpenAdd]=useState(false)
   
@@ -17,6 +18,7 @@ export function CollectionTasks() {
   useEffect(()=>{
     setIsLoading(true)
     getCategory()
+    getCollections()
   },[])
  
   function getCategory(){
@@ -34,6 +36,7 @@ export function CollectionTasks() {
       })
   }
 
+  
   function toggleTask(id){
     if(category.categoryTasks.find((task)=>task._id == id).isCompleted){
       axios.put(`https://todo-app-backend-wine.vercel.app/tasks/incomplete/${id}`,{},{
@@ -43,8 +46,8 @@ export function CollectionTasks() {
       }).then((res)=>{
         let updatedTask = res.data.inCompletedTask
         setCategory((prev)=>({
-        ...prev , categoryTasks:prev.categoryTasks.map((task)=> task._id === updatedTask._id? updatedTask :task)
-      }))
+          ...prev , categoryTasks:prev.categoryTasks.map((task)=> task._id === updatedTask._id? updatedTask :task)
+        }))
       }).catch((err)=>{
         console.log(err.response.data.message)
       })  
@@ -56,31 +59,45 @@ export function CollectionTasks() {
       }).then((res)=>{
         let updatedTask = res.data.completedTask
         setCategory((prev)=>({
-        ...prev , categoryTasks:prev.categoryTasks.map((task)=> task._id === updatedTask._id? updatedTask :task)
-      }))
-    }).catch((err)=>{
+          ...prev , categoryTasks:prev.categoryTasks.map((task)=> task._id === updatedTask._id? updatedTask :task)
+        }))
+      }).catch((err)=>{
         console.log(err.response.data.message)
       })  
     }
   }
-
+  
   function deleteTask(id){
     let task = category.categoryTasks.find((task)=>task._id == id)
     let isDueDate = new Date(task.dueDate) < Date.now()
     console.log(isDueDate)
     axios.delete(`https://todo-app-backend-wine.vercel.app/tasks/${id}`,{
-       headers:{
-          authorization:localStorage.getItem("Token")
-       }
+      headers:{
+        authorization:localStorage.getItem("Token")
+      }
     }).then((res)=>{
-       getCategory()
-       if(isDueDate){
+      getCategory()
+      if(isDueDate){
         setDueTasks(dueTasks-1)
-       }
+      }
     }).catch((err)=>{
-       console.log(err)
+      console.log(err)
     })
-}
+  }
+
+
+  function getCollections(){
+    axios.get("https://todo-app-backend-wine.vercel.app/categories",{
+      headers:{
+        authorization:localStorage.getItem("Token")
+      }
+    }).then((res)=>{
+      console.log(res.data)
+      setCollections(res.data.categories)
+    }).catch((err)=>{
+      console.log(err)
+    })
+  }
 
   return (
   <>
@@ -99,7 +116,7 @@ export function CollectionTasks() {
     </div>
     <div className="tasks p-10">
         {category.categoryTasks?.map((task)=>(
-         <TaskItem task={task} toggleTask={toggleTask} deleteTask={deleteTask} setCategory={setCategory} isOpenAdd={isOpenAdd} setIsOpenAdd={setIsOpenAdd} category={category._id}/>
+         <TaskItem task={task} toggleTask={toggleTask} deleteTask={deleteTask} setCategory={setCategory} isOpenAdd={isOpenAdd} setIsOpenAdd={setIsOpenAdd} category={category._id} collections={collections} getCategory={getCategory}/>
         ))}
     </div> 
 
