@@ -35,4 +35,12 @@ input[type="checkbox"] {
     border-color: var(--primary-color);
 }
 
+[type='radio'] {
+    border-color: #903F00 !important;
+}
+
+
+[type='radio']:checked {
+    border-color: oklch(48.8% 0.243 264.376) !important;
+}
 

@@ -38,23 +38,17 @@ export function MoveTaskModal({isOpenMove , setIsOpenMove , collections , curren
             </div>
             <form onSubmit={(e)=>submit(e)}>
              <h3 className="text-2xl text-(--medium-color) my-3">Choose Collection</h3>
-             <div className="grid gap-4  py-4 md:py-3">
-             <div className="z-10 bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-full" data-popper-reference-hidden="" data-popper-escaped="" data-popper-placement="top">
+             <div className=" py-4 md:py-3">
+             <div className="z-10 bg-neutral-primary-medium  rounded-base  w-full" data-popper-reference-hidden="" data-popper-escaped="" data-popper-placement="top">
             {collections?
              <ul className="p-2 text-sm text-body font-medium" aria-labelledby="dropdownHelperRadioButton">
              {collections.map((collection)=>(<div>
               {collection._id != category ? 
                <li>
-               <div className="flex p-2 w-full hover:bg-neutral-tertiary-medium hover:text-heading rounded">
-                <div className="flex items-center h-5">
-                 <input onClick={()=>setSelectedCollection(collection._id)} id="helper-radio-1" name="helper-radio" style={{ accentColor: "red" }} type="radio" value={collection._id} className="w-4 h-4 "/>
-               </div>
-              <div className="ms-2 text-sm">
-               <label for="helper-radio-1" className="select-none font-medium text-heading">
-                  <div className="mb-1">{collection.title}</div>
-               </label>
-              </div>
-              </div>
+               <div class="flex items-center ps-4 border mb-1 border-default hover:bg-neutral-tertiary-medium rounded-base">
+               <input  onChange={()=>setSelectedCollection(collection._id)} id="bordered-radio-1" type="radio" value="" name="bordered-radio"  className="w-4 h-4  cursor-pointer focus:ring-0"/>
+               <label for="bordered-radio-1" className="w-full py-4 select-none ms-2 text-sm font-medium text-heading">{collection.title}</label>
+                </div>
                </li> : null
                     }
                 </div>

@@ -18,40 +18,14 @@ export default function UserContextProvider(props){
         if(localStorage.getItem("User")){
             setUserData(JSON.parse(localStorage.getItem("User")))
         }
-        getUser()
-
-        getDueTasks()
+        
     },[])
     
-    function getUser(){
-        axios.get("https://todo-app-backend-wine.vercel.app/users",{
-            headers:{
-                authorization:localStorage.getItem("Token")
-            }
-        }).then((res)=>{
-            console.log(res.data)
-            setUserData(res.data.user)
-            localStorage.setItem("User" , JSON.stringify(res.data.user))    
-        }).catch((err)=>{
-            console.log(err)
-        })
-    }
+  
 
-    function getDueTasks(){
-        axios.get("https://todo-app-backend-wine.vercel.app/tasks",{
-            headers:{
-              authorization:localStorage.getItem("Token")
-            }
-           }).then((res)=>{
-             console.log(res.data)
-             let tasks = res.data.tasks.filter((task)=>new Date(task.dueDate) < Date.now()).length
-             setDueTasks(tasks)
-           }).catch((err)=>{
-            console.log(err)
-           })
-    }
+    
     return (
-        <UserContext.Provider value={{token,setToken,userData,dueTasks , setDueTasks}}>
+        <UserContext.Provider value={{token,setToken,userData , setUserData ,dueTasks , setDueTasks}}>
             {props.children}
         </UserContext.Provider>
     )

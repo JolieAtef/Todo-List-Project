@@ -3,6 +3,8 @@ import "./Notfound.module.css"
 
 export function Notfound() {
   return <>
-    <h2>Notfound</h2>
+  <div className="bg-(--low-color)">
+    <h2 className="text-2xl text-(--secondary-color) text-center mt-75">404 Not found</h2>
+   </div>
   </>
 }

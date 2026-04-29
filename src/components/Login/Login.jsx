@@ -20,7 +20,7 @@ let schema = z.object({
 export function Login() {
 
   let [isLoading, setIsLoading]=useState(false)
-  let {setToken} =useContext(UserContext)
+  let {setToken , setUserData , setDueTasks} =useContext(UserContext)
   let navigate=useNavigate()
  
   let {formState, register,handleSubmit}=useForm({
@@ -37,9 +37,11 @@ export function Login() {
     setIsLoading(true)
     axios.post("https://todo-app-backend-wine.vercel.app/users/login",data).then((res)=>{
           toast.success(res.data.message);
-          let timer = setTimeout(() =>{
           localStorage.setItem("Token",res.data.token)
           setToken(res.data.token)
+          getUser()
+          getDueTasks()
+          let timer = setTimeout(() =>{
           navigate("/home")
           clearTimeout(timer)
         },1300)
@@ -49,40 +51,40 @@ export function Login() {
         setIsLoading(false)
       }
     )
-
-    
   }
 
+  function getUser(){
+    axios.get("https://todo-app-backend-wine.vercel.app/users",{
+        headers:{
+            authorization:localStorage.getItem("Token")
+        }
+    }).then((res)=>{
+        console.log(res.data)
+        setUserData(res.data.user)
+        localStorage.setItem("User" , JSON.stringify(res.data.user))    
+    }).catch((err)=>{
+        console.log(err)
+    })
+}
+
+
+function getDueTasks(){
+  axios.get("https://todo-app-backend-wine.vercel.app/tasks",{
+      headers:{
+        authorization:localStorage.getItem("Token")
+      }
+     }).then((res)=>{
+       console.log(res.data)
+       let tasks = res.data.tasks.filter((task)=>new Date(task.dueDate) < Date.now()).length
+       setDueTasks(tasks)
+     }).catch((err)=>{
+      setDueTasks(0)
+      console.log(err)
+     })
+}
 
 return <>
-{/* <div className="p-20">
-<form className="w-full md:w-[50%]  mx-auto py-10  px-15 shadow-2xl rounded-xl" onSubmit={handleSubmit(LoginFun)}>
-  <h2 className="text-3xl font-semibold my-4 text-center">Welcome back! Login</h2>
-  
-  {successMsg &&
-  <div className="p-4 mb-6 text-sm text-fg-success-strong rounded-base bg-success-soft" role="alert">
-  <span className="font-medium capitalize">{successMsg}</span>
-  </div>}
 
-  <div className="relative z-0 w-full mb-5 group">
-      <input {...register("email")} type="email" id="floating_email" className="block py-2.5 px-0 w-full text-sm text-heading bg-transparent border-0 border-b-2 border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer" placeholder=" " />
-      <label htmlFor="floating_email" className="absolute text-sm text-body duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Email Address</label>
-      {formState.errors.email &&<p className="text-red-500">{formState.errors.email.message}</p>}
-  </div>
-
-  <div className="relative z-0 w-full mb-5 group">
-      <input {...register("password")} type="password" id="floating_password" className="block py-2.5 px-0 w-full text-sm text-heading bg-transparent border-0 border-b-2 border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer" placeholder=" " />
-      <label htmlFor="floating_password" className="absolute text-sm text-body duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Password</label>
-      {formState.errors.password &&<p className="text-red-500">{formState.errors.password.message}</p>}
-  </div>
-
-  
-  <button type="submit" className=" my-2 w-full text-white bg-amber-700 box-border border border-transparent cursor-pointer hover:bg-amber-800/90 focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed" disabled={isLoading}>
-    {isLoading? <span> <i className="fa fa-spin fa-spinner m-1"></i>Loading...</span>:"Login" }
-  </button>
-
-</form>
-</div> */}
 
 
 <div className="min-h-screen grid md:grid-cols-2 ">
